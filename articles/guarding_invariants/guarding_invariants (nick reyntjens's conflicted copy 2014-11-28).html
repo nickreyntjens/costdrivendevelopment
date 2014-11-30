@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<title>Guarding invariants</title>
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+	$(window).bind("load", function() {
+	   $('.collapse-group .collapse').hide();
+	   $('.collapse-group .btn').on('click', function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		var $collapse = $this.closest('.collapse-group').find('.collapse');
+		$collapse.slideToggle('slow');
+	   });
+	});
+</script>
+</head>
+<body>
+<div id="wrapper">
+<header id="header">Software Costs Agile Reduction Techniques (SCART) </header>
+<nav id="nav">
+  <ul>
+    <li><a href="">Unit testing</a></li>
+    <li><a href="">Managing dependencies</a></li>
+    <li><a href="">Extra 1</a></li>
+    <li><a href="">Extra 2</a></li>
+  </ul>
+</nav>
+<article id="main">
+<section>
+  <div class="opening">
+    <h1>Guarding invariants</h1>
+    <div>Objects should consistently check their invariants.</div>
+  </div>
+  <p>      
+    By putting internal tests explicitely in the code (with assert statements), many bugs can be discovered early and solved much more economically, then with any other technique.
+  </p>
+  <p> 
+  In order to illustrate, lets us develop a little utility class. Suppose, we are writing a complex financial component that requires exact representation of factions. For this purpose we will develop a class that represents a fraction. Note that in reality there exist frameworks that are specially designed to calculate with fractions and exact numbers, but this example is simple and very useful for illustrating the technique.
+  </p>
+<!-- http://www.javapractices.com/topic/TopicAction.do?Id=102 -->
+<pre>
+<code class="language-java">
+public class Fraction {
+	private int nominator;
+    private int denominator;
+    
+    public Fraction(int nominator, int denominator) {
+    	Assert.isTrue(denominator != 0);
+        this.nominator = nominator;
+        this.denominator = denominator;
+    }
+    
+	public void multiply(int multiplier) {
+  		nominator = nominator * multiplier;
+        simplify();
+    }
+    
+    public void divided(int divider) {
+    	Assert.isTrue(divider != 0);
+  		denominator = nominator * divider;
+        simplify();
+    }
+    
+    private void simplify() {
+    	double rationalNumberValueBefore = nominator / (double) denominator;
+        // Complex logic comes here ...
+        // Complex logic comes here ...
+        // Complex logic comes here ...
+        double rationalNumberValueAfter = nominator / (double) denominator;
+        Assert.isTrue(Math.abs(rationalNumberValueBefore - rationalNumberValueAfter) < 0.1);
+    }
+}
+</code>
+</pre>
+<p>
+In the exmaple, we make use of the assert statement at three key moments. Once in the constructor, when an external party is inserting data in to the object, once in the divide method and one after we have performed a complex calculation. The first two assert statements are examples of defensive programming while the third assert statement is to ensure that our calculation is correct. Both are examples of the wider concept of failing fast.  
+</p>
+<p>
+The fail fast principle is often used in situations where failure in one component (or class) might not be visible until it leads to failure in another component (or class). This delay of visibility makes it much harder to discover and solve the bug.
+But won't this make my code fail in production? Yes. And that is a good thing considering the alternative, 
+your code continuous to work but the system is making slight mistakes here and there. For most system (banks etc) this is a nightmare.</p>
+<p>
+This does not mean that an entire system has to go down, but bug should be dealt with in a controlled manner. For example, in a system that processes messages, only certain kinds of messages can no longer be processed and those messages are written to a database for later proccessing when the bug is fixed. This is called gracefull degradation and is ofthen a requirement in systems that need high availability. Also note that 'fail fast' principle sounds so negative but we may as well have been called 'discover incorrect behavior fast'.
+</p>
+<aside class="keynote">Failing fast makes it easier to discover and solve bugs.</aside>
+<p>
+Defensive programming means that a programmer should prevent its code from being misused. In the example, the programmer does not allow external code to put the divider of the fration object to zero. Defensive programming means that code should expact incorrect input to be put into it and should guard agains that. Note that such incorrect input is other the result of a bug else where and helps to discover those bugs elsewere!  
+</p>
+<aside class="keynote">When writing a class, programmers should not put trust in the fact that that the code that will use that class will use it correctly</aside>
+<p>
+Programmers should also not put trust in themselves. When a programmers writes a none trivial piece of code built upon a reasoning, he or she should expect that reasoning to be flawed by default, and thus put an assert that checks his or her reasoning. 
+</p>
+<aside class="keynote">When writing a complex piece of code, programmers should presume their reasoning to be flawed and test the correctness of it by putting in an assert.</aside>
+</section>
+<div id="conclusion">Thrust no one, not even yourself!</div>
+</div>
+</body>
+</html>

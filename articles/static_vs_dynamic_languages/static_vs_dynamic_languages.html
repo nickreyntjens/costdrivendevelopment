@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Static vs dynamic languages</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"></div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Static vs dynamic langauges</h1>
+        <div>Static languages are self documenting, they lower the cost of communication.</div>
+      </div>
+<p>
+Advocates of dynamic languages often claim that a formal type checking system is not needed 
+because the correctness of a program should be tested through automated tests. 
+While this is to some extent true, this reasoning is not correct.</p>
+<p> Automated tests can never offer the same type safety than a compiler can. 
+The reason is that in order to 'prove' that there are no type errors, 
+the suite of tests would need to make the program execute every possible path of execution that it could possibly follow.
+</p>
+<p> 
+The number of execution paths that any program of reasonable size approximates infinity and therefore running these 'all covering' test will take an infinite amount of time. And that is not very practical.</p>
+<p> 
+Automated tests can never offer the same type 
+safety than a compiler can. The reason is that in order to 'prove' 
+that there are no type errors, the suite of tests would need to make the program 
+execute every possible path of execution that it could possibly follow. 
+The number of execution paths that any program of reasonable size has approximates infinity and 
+therefore running these 'all covering' test will take an infinite amount of time. For this reason, dynamic langauges 
+can never have the same amount of type safety then statically compiled languages, independent of the amount of automated tests. </p>
+<aside class="keynote">
+Dynamic langauges can never have the same amount of type safety then statically compiled languages.
+</aside>
+<p>But this is not the main problem that they are suffering from. There main problem is that 
+they do not guide the user in the possible arguments that may be passed into a function. </p>
+<p> 
+In a dynamic langauge the user have to know (or find out) what arguments are valid for a given function. This increase the cost of communication dramatically. Lets examplify by comparing two code snippets that open a file in a read only mode. </p>
+<pre>
+<code class="language-java">
+// opening a file in read only mode in a dynamic language
+openFile("c:/myfile/file1.txt", "readonly")
+</code>
+</pre>
+<pre>
+<code class="language-java">
+// opening a file in read only mode in a static language
+openFile("c:/myfile/file1.txt", Mode.Readonly)
+</code>
+</pre>
+<p>
+At first sight at appears that both snippets are equally complex, 
+but when we define complexity as 'the inability to predict the behavior of a program' 
+(see <a href="../avoid_unnessasary_frameworks/avoid_unnessaray_frameworks.html">Complexity</a>), 
+it can be shown that the first snippet is more complex then the second snippet. </p>  
+<p>
+For example, if we ask a programmer to change the code so that the file gets opened in a read-write mode, adapting the second snippet will be much easier then adapting the second snippet. The reason is that in the 
+second snippet <a href="http://en.wikipedia.org/wiki/Intelligent_code_completion">code completion</a> will show the programmer that  the correct value is Mode.READ_WRITE_MODE. </p>
+<p>
+In contrast, in the first snippet the programmer get no such assistence. 
+He or she will have to look into the implementation of the openFile method.   </p>  
+<p>
+Some may say that the programmer will find the answer on the internet in a second. Yes, this is true for a well defined domains like this one, 'opening files'. But this option is not available for in-house developed software. 
+These articles use small examples, in order to stay concice, but the two snippets may just aswel have been about 
+changing the status of an invoice in an in-house developed accounting system. In this case the programmer is limited to looking inside the code, or consulting documentation. </p>
+<p>
+In agile environements the documentation is always outdated. This means in reality only two options remain, 
+ask someone or look inside the code. Both options are more expensive that using the built-in code completion that static langauges offer. If the domain is small and well standardize a programmer can still memorise all valid arguments. 
+This is why dynamic langauge are mostly found in manipulating the DOM of web pages or automatic command line tasks, since both of these domains are very stable. In these domain the extra cost of communication is small and so it works quite well.</p>
+<aside class="keynote">
+Dynamic langauges are best suited for stable and standerdized domains.
+</aside>
+<p>
+The cost of communication will go up significantly per extra team member. 
+Individual programmers somethings forget the cost of typing on a keyboard is insignificant to the cost of communication. </p>
+<aside class="keynote">
+The cost of communication is almost always greater then the cost of typing code though a keyboard. Static languages aid in communicating.
+</aside>
+<p>
+This is a less interesting section, but must be said for completeness. Another remark that dynamic language advocates or more flexible. For example, dynamic langauges allow your to write closures and perform aspect oriented programming in a 'simple way' (small amount of cryptic code). </p>
+<p>
+While this was true for some time. Compile langauges have caught up in this respect. Lambdas and closure are now very widespread in compiled langauges. Aspect oriented programming can be respresented in a static langauge by making extensive use of lambdas. The static counter parts of these advance 'flexible' techniques are easier to understand and explain to other team members. They are much more preditable and therefore easier to maintain and more cost effective.  </p>
+    </section>
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)." </div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Avoid complexity</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Avoid complexity</h1>
+        <div>Frameworks can significantly increase the complexity of a component or system. So be skeptical about whether to use a framework.</div>
+      </div>
+      <p> The key message that I want to deliver with this article is to limit the amount of used frameworks and don't sacrifice predictability to save a few lines of code. While there are many sources of complexity, I have learned through experience that most complexity is often caused by introducing frameworks in the system that only replace a few lines of code. Before we can delve further into this discussion, it is useful to define what complexity is. </p>
+      <p> Merrian-Webster uses the following definition: "A part of something that is complicated or hard to understand". Well now, a piece of code (or a system) is hard to understand when it is hard to predict its behavior. So we can alter the definition of complexity into something more measurable: A system (or a snippet of code) is complex when a programmer is unable to accurately predict it's behavior. </p>
+      <div class="definitionblock">
+        <div class="word">Complexity (in context of software development)</div>
+        <div class="definition">The complexity of a component (or a system), is the degree to which a programmer is unable to correctly predict its behavior.</div>
+      </div>
+      <p>
+      The advantage of this definition is that it is more measurable. Measuring how many times tests fail will give an indication of the complexity of the project or component at hand. By comparing this metric between two projects, companies can identify project where the code base has become less predictable. Indeed, when a project has a significantly higher average ratio of failing tests after each test suite run, this indicates that the component's behavior is less predictable. 
+      </p>
+      <p>
+      Usual suspects are frameworks that use reflection (bypassing the compiler's type safety checking), have dependencies on components with unpredictable APIs, or have part of their code in desperate need of refactoring. Whatever the problem, the underlying reason(s) is often well know by (some) members of the team. A cargo cult culture usually prevents them from altering the system in order to make it less complex. It is the responsibility of the management to fight a cargo cult culture from manifesting itself.</p>
+ 	<aside class="keynote">
+    	Measuring how many times tests fail will give an indication of the complexity of the code.
+    </aside>
+<p>
+Let me exemplify what I mean by increasing the complexity of a software project by introducing frameworks. What I will show is an approximation of what could be real code in a software system. Suppose we need a method that stores a person to the database, something like this:
+</p>
+<pre>
+<code class="language-java">
+void addPersonToDatabase(String name, String sirName) {
+	try {
+        Connection dataBaseConnection = DriverManager.getConnection("jdbc:postgresql:database");
+        dataBaseConnection.setAutoCommit(false);
+        dataBaseConnection.createStatement().executeUpdate("INSERT INTO PERSONS VALUES (" + name + "," + sirName + ")");
+		dataBaseConnection.commit();
+    } catch(Exception e) {
+    	con.rollback();
+        showMessage("Something whent wrong, please contact support");
+        throw e;
+    } finally {
+    	dataBaseConnection.close();
+    }
+}
+</code>
+</pre>
+<p>
+To none-technical people this may look complex, but that's because they you are unfamiliar with the language. This is similar to how Chinese looks complex. But to Chinese people, Chinese is not complex. The message in a snippet of Chinese is very clear to somebody who speaks the language. In a similar way, for programmers, this snippet is not complex. It consist only of basic words of a language that they speak very well.
+<aside class="sidenote">
+When something goes wrong, the code inside the catch block will be executed. In this snippet when something goes wrong, the text "something went wrong" will be shown to the user.
+</aside>
+Therefore a programmer can easily predict how this code snippet will behave. In contrast, lets use a framework that appears (on first sight) to 'simplify' this snippet of code.<p>
+<pre>
+<code class="language-java">
+@Transactional
+void addPersonToDatabase(String name, String sirName) throws Exception {
+	dataBaseConnection.createStatement().executeUpdate("INSERT INTO PERSONS VALUES (" + name + "," + sirName + ")");
+}
+</code>
+</pre>
+<p>
+This snippet appears on first sight to be easier. But this is based on the implicit presumption that less lines of code is easier. But when you ask a programmer to explain what the effect is of the @Transaction keyword used here, he or she will say that is makes the method transactional. However, the  word '@Transaction' is <b>not</b> part of the built-in set of words of the language. The result is that how exactly the method becomes transactional, will feel like a bit of magic to the programmer.
+</p>
+<p>
+ Because of this 'magic', the finer details of execution are unclear to the programmer. This can be observed by the behavior of the programmer when asked to add a specific behavior to this code snippet. For example, to send an email to the system admin when something goes wrong.  
+</p>
+<p>
+To send an email when something goes wrong, the programmer will have to inject some special code snippet at a place he or she does not know. So he or she will look to the internet and some snippet of code will be copy pasted. And lots of times, this strategy works. But the predictability of the system will decrease significantly and the barrier to enter and understand the code will have increased. Because of the increase of complexity, doing trivial things can sometimes take days to figure out how to do them.
+</p>
+<aside class="keynote">
+The magic offered by many frameworks significantly decreases the preditabily of code.
+</aside>
+<p>
+In strong contrast to this, lets observe how easy it is to adapt the original code so that it sends an email when an exception occurs. 
+</p>
+
+<pre>
+<code class="language-java">
+void addPersonToDatabase(String name, String sirName) {
+	try {
+        Connection dataBaseConnection = DriverManager.getConnection("jdbc:postgresql:database");
+        dataBaseConnection.setAutoCommit(false);
+        dataBaseConnection.createStatement().executeUpdate("INSERT INTO PERSONS VALUES (" + name + "," + sirName + ")");
+		dataBaseConnection.commit();
+    } catch(Exception e) {
+    	con.rollback();
+        showMessage("Something whent wrong, please contact support");
+        sendEmail("support@mycompany.com", "Something whent wrong in function addPersonToDatabase");
+        throw e;
+    } finally {
+    	dataBaseConnection.close();
+    }
+}
+</code>
+</pre>
+<p>
+A good remark some programmers will make, is that the exception handling code will need to be repeated many times. By using the proper techniques, this can be avoided. In this case, a function that takes a lambda (a function that takes a piece of code as one of its arguments) would allow us to have one central place that deals with connections and exceptions, while retaining the predictability of the system.
+</p>
+<pre>
+<code class="language-java">
+public static void runInTransaction(Runnable codeToRunInTransaction) {
+	try {
+        Connection dataBaseConnection = DriverManager.getConnection("jdbc:postgresql:database");
+        dataBaseConnection.setAutoCommit(false);
+        codeToRunInTransaction();
+		dataBaseConnection.commit();
+    } catch(Exception e) {
+    	con.rollback();
+        sendEmail("admin@mycompany.com", "Something when't wrong!");
+        throw e;
+    } finally {
+    	dataBaseConnection.close();
+    }
+}
+
+void addPersonToDatabase(String name, String sirName) {
+	runInTransaction((conn) => {
+    	conn.createStatement().executeUpdate("INSERT INTO PERSONS VALUES (" + name + "," + sirName + ")");
+    });
+}
+
+void addAddressToDatabase(String street, String houseNumber) {
+	runInTransaction((conn) => {
+    	conn.createStatement().executeUpdate("INSERT INTO ADDRESS VALUES (" + street + "," + houseNumber + ")");
+    });
+}
+</code>
+</pre>
+<p>
+The big difference between these two approaches is that the second approach uses only standard language constructs. Therefore its behavior is much easier to predict by a programmer. This is because programmers know the language constructs of their langauge (if, then, else, lambda etc.) by heart. In contract, programmers don't know every framework by heart.  
+Note to programmers reading this: I know this code can be improved, but writing more realistic code would draw away the attention from the main point of this article. 
+</p>
+<p>
+The key lesson to take away from this article is to prefer some extra lines of normal code over introducing an extra framework.
+By avoiding frameworks that in essence only replace a few lines of code, the software becomes much easier to understand for programmers. Programmers will be able to focus on adding business logic, instead of figuring out how to get some framework to do a job, that if plain normal code had been used, would take a 15 minutes or so.  In product design it is a well know fact that a system that uses less components, frameworks etc... in order to achieve its goal will be more reliable and cheaper to produce. Software is no different.
+</p>
+    </section>
+  </article>
+  <div id="conclusion"> "Don't use a swiss army knife to eat your soep" </div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

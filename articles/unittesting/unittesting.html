@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Unit testing</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Unit tests</h1>
+        <div>Your automated tests should comprise 90% out of use case tests and only 10% out of unit tests.</div>
+      </div>
+      <p> Typically in a company, somebody will write a class and successively a unit test for that class. 
+	      This is a bad approach because unit tests are tighly coupled to the classes that they test. 
+		  As a consequence, when those classes need to be are altered, its unit tests must be updated aswel. 
+		  This makes refactoring harder, then should the unit tests not be there. 
+		  Note that, in this document we use the definition that wikipedia (at the time of writing) gives to a unit test. </p>
+      <div class="definitionblock">
+        <div class="word">Unit test</div>
+        <div class="definition"> In object-oriented programming, a unit is often an entire interface, such as a class, but could be an individual method. </div>
+      </div>
+      <figure> <img src="./images/unit_tests.png" alt="Unit tests"/>
+        <figcaption>Unit tests as typically found in companies</figcaption>
+      </figure>
+    </section>
+    <section>
+      <h2>Why the need refactor?</h2>
+      <p> Not being able to refactor is often the beginning of the end. When code is no longer able to evolve, any new feature that gets added to it, will make it harder to add new features in the future. Being able to refactor is therefore a key requirement of agile programming! Adding new features, changing requirement and improving the quality of the code all require the ability to alter (or refactor) the existing code. </p>
+      <figure> <img src="./images/refactoring.png" alt="Causes of refactoring"/>
+        <figcaption>Causes of refactoring</figcaption>
+      </figure>
+      <p> When a programmer adds a new feature to an exising code base, he or she is often faced with a choice. The programmer can add the feature quickly, but leave the code in a slightly more complex state than before. Or he or she can update parts of the code (refactor), so that the to be added feature and future features become easier to add. </p>
+      <p> In addition to making it easier to add new features in the future, refactoring also solves bugs that have not yet been discovered. So it is logical, since refactoring is the process of making code easier to understand. </p>
+      <aside class="keynote">With no refactoring the effort that is required to add features will grow expontially over time.</aside>
+      <p> So obviously the right choose is to refactor, if there is a need for it, and then add the feature. But having many unit tests on a class will prolong the time required to alter that class. Lets say that in the absense of units tests, a little refactoring and adding the feature would take the programmer four hours while simply adding the feature would take him three hours. In this situation most programmers will take the path that makes their life easy in the long run and choose to refactor. </p>
+      <p> But now suppose that there are lots of unit tests and that in order to do the little refactoring, four classes must be altered. Further suppose that each of those four classes has 10 units tests associated with it. To further complicate matters, let us suppose that many of those unit tests are copy pasted, repetitive code (which in most companies they are). </p>
+      <p> Now the programmer needs to update 4 classes + 40 unit tests in order to refactor, and this will take eight hours, or possibly twelve... the programmer can only estimate. Of cource by tomorrow the new release must be ready (which always is the case). So what will the programmer do? Take the path of least resistence. And is this his or her fault? No! Because if he or she chooses the right path, he or she could be blamed for missing the release date and eventually loose his or her job. 
+        So an environnement with losts of unit tests demotivates refactoring, and that is not a healthy situation. </p>
+      <aside class="keynote"> An environnement with losts of unit tests demotivates refactoring. </aside>
+    </section>
+    <section>
+      <h2>So what is the solution?</h2>
+      <p> On the one hand we need automated tests to prevent regession and prove that added features work. But on the other hand, adding them will slow down refactoring, which will lead to harder to maintain code in the furture. What a dilemma! The answer is to employ use case tests rather then unit tests. Let us define a use case test. </p>
+      <div class="definitionblock">
+        <div class="word">Use case test</div>
+        <div class="definition"> A use case test, is an automated test that tests a component from the outside. When looking at a component as an input ouput machine, a use case test only uses its public API. </div>
+      </div>
+      <figure> <img src="./images/usecase_tests.png" alt="Use case tests"/>
+        <figcaption>Use case tests talking to a public API of a component</figcaption>
+      </figure>
+      <p> A consequence of this definition is that how the component realises a use case, is of no importance to the use case test. One use case may be solved by one class, or by ten classes working together. And the programmer is free to change this, without having to alter the existing use case tests. </p>
+      <p> The consequence of this are severe. Firstly, use cases tests can be written before the use case is actually supported. The true definition of test driven developement (TTD). When TTD is applied using unit tests, by the definition employed by wikipedia, it means that one use case must be solved by one class. This is an extremely (artificial) presumption and thus in practice does not work. </p>
+      <aside class="keynote"> None of the effort put in writing use case tests can ever be lost. </aside>
+      <p> Because use cases tests are independent of the underlying implementation, none of the effort put in writing use case tests can ever be lost. If, because of performance issues or other reasons, the team descides the change the architecture of the component. None of the effort put into the use case tests is lost. This is in great contrast to unit tests. </p>
+      <p> Given the fact that for each use case that the project will support when it is finished, there should be a use case. I advice to write all use case tests of which the business is already sure that the use case will need to be supported. This will greatly reduce the risk associated with the project and allow a more correct measuring of progress.</p>
+    </section>
+    <section>
+      <h2>Does this mean that we should never have unit tests?</h2>
+      <p> No. For some pieces of code a programmer may descide that a unit test is appropriate. Programmers know instinctively when this is so. This is usually for a piece of code that has some complexity (many edge cases) and has a mathematical or algorithmic feel to it: Datastructures, schedualers, ORM's. Mostly these subcomponents perform a very defined task, and that task is very stable. It is independent from additional requirements. Basically a programmer should write a unit test when he or she does not thrust the code that he or she has just written. </p>
+      <aside class="keynote"> A unit test should be written when a programmer does not trust his code. </aside>
+      <p> Because this is an open defintion and I like to give managers a measurable metric:  Whether a unit test should be written or not must be measured by how much a programmer thrusts his code. So, we must measure the level of thrust that a programmer has in his code. </p>
+      <p> We can test the level of thrust that a programmer has in his or her code by letting the programmer make a bet. If the programmer does not write a unit test for a class, the programmer recieves ten euro. For one out of four classes for which the programmer does not write a unit tests is tested by another programmer. If a bug is discovered in the class code, the programmer that wrote it must pay 100 euro. </p>
+      <div class="collapse-group">
+        <p> This method is theoretical, and needs refinement, but the idea is sound... it is an objective way to measure the thrust of the programmer. With these numbers, a programmer should take the bet, if he believes that there is a 60% change that the code is bug free. <a class="btn" href="#">View details</a> </p>
+        <div class="collapse">
+          <aside class="details"> Mathematically, let
+            <ul>
+              <li><i>p'(theClassHasABug)</i>be defined as: the chance, as estimated by the programmer, that his class contains a bug; </li>
+              <li><i>gain(reward)</i>be defined as: +10 euro;</li>
+              <li><i>gain(penality)</i> be defined as: -100 euro;</li>
+              <li><i>p(sampled)</i> be defined as: the change that a class gets sampled;</li>
+              <li><i>p'(bugDiscovered)</i> the change, as estimated by the programmer, that his class gets sampled and contains a bug; </li>
+            </ul>
+            Then:
+            <ul>
+              <li><i>p'(bugDiscovered) = p'(theClassHasABug) * p(sampled)</i></li>
+              <li>so that if <i>p'(bugDiscovered) * abs(penality) &lt; reward</i> then the programmer should take the bet;</li>
+            </ul>
+            Filling in the numbers we get:
+            <ul>
+              <li><i>p'(theClassHasABug) * 25% * 100 &lt; 10;</i></li>
+              <li>simplified we get <i>p'(theClassHasABug) &lt; 10 / (100 * 25%)</i>;</li>
+              <li>simplified we get <i>p'(theClassHasABug) &lt; 4 / 10</i>;</li>
+              <li>meaning that if <i>p'(theClassHasABug) &lt; 40% </i> then the programmer should take the bet</li>
+            </ul>
+            In other words, when a programmer believes that there is a 60% change that the code is bug free, he should take the bet. </aside>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>Making components suitable for use case tests?</h2>
+      <p>Simular to unit tests, after each change that the programmer does to the code, he or she wants to run the use case tests, to verify that noting gets broken. As a consequence, running all use case tests should be very fast.</p>
+      <p>In order to accomplice this goal, the component must allow its full environnement to be injected. All of the external elements that affects a component's behavior must be fully under the control of the use case tests. This includes filesystem and database access, the current time and clients to other components. When a usecase test executes, it creates a new instance of the component, injects an appropriate environnement and calls methods on the components API in order to verify its behavior.</p>
+      <figure> <img src="./images/environnement.png" alt="environnement being injected"/>
+        <figcaption>A component's environnement gets injected</figcaption>
+      </figure>
+      <p> When the environnement of a component takes client API's to external systems, the unit tests can be implemented in two ways. </p>
+      <p> In this approach, the use case test creates instances of all required components and connections them by using simulated, in-memory, middleware. This is easy to do, here are some popular solution for java:
+      </p>
+      <ul>
+        <li>For databases, <a href="http://hsqldb.org/">hsqldb</a>.</li>
+        <li>messaging  servers, <a href="http://activemq.apache.org/how-to-unit-test-jms-code.html">ActiveMQ</a>.</li>
+        <li>For rmi, give the remote objects directly to the objects that require them.</li>
+      </ul>
+      <p>
+      The advantage of this approach is that it tests the entire system as a hole, all in memory. This means that all the clients implementations, that often do serialization and deserialization, are also tested. As well as all presumptions that one components makes about the behavior of other components. This approach is the ideal. In order to be able to fully use this strategy, all components must be written in the same language and there cannot be <a href="../managing_dependencies/managing_dependencies.html">inconsistent diamonds</a> in the dependency tree. Another major advantage of this approach is that if a bug is found, finding the cause of the bug is greatly simplified since the programmer can just step though the system as a hole with his debugger.
+      </p>
+      <aside class="keynote"> Use case tests that test the system as a hole, have the advantage that they tests all serialization and deserialization aspects of messages aswel, and that they make solving bugs easier.</aside>
+      <p> Alternatively, if your company does not have  <a href="../managing_dependencies/managing_dependencies.html">well behaved dependency management</a>, a use case test can pass along mocked clients to the component. In this way only the business logic of the component is tested, but the its serialization and deserialization of the messages that send makes to other components. Also, the assumptions that are made over other components may be wrong. </p>
+      <figure> <img src="./images/testing_system_as_a_hole_vs_one_component_at_a_time.png" alt="Unit tests"/>
+        <figcaption>Two use case testing strategies</figcaption>
+      </figure>
+      <p> Note that in both cases, all use cases tests can run in parallel. How many test that can be run in parallel is only constrained by the amount of physical ram the is present on the development machines of the programmers. Alternatively, the use cases test could be run on separite machine that is built for this purpose. The main point is that individual use case tests do not have to be super fast, as long as they can be parallised. It is perfectly ok for a use case test to take five minutes, since of all use case tests are executed in parallel. </p>
+    </section>
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)." </div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

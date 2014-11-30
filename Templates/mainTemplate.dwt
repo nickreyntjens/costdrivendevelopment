@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Unit testing</title>
+<!-- TemplateEndEditable -->
+<link href="../articles/prism.css" rel="stylesheet" type="text/css">
+<link href="../articles/style.css" rel="stylesheet" type="text/css"/>
+<script src="../articles/js/prism.js"></script>
+<script src="../articles/js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../articles/index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../articles/index.html">Home</a></li>
+      <li><a href="../articles/about/about.html">About</a></li>
+      <li><a href="../articles/articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- TemplateBeginEditable name="main" -->
+  <article id="main">
+  	Put some articles with sections here  
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)." </div>
+  <!-- TemplateEndEditable -->
+  </div>
+</body>
+</html>

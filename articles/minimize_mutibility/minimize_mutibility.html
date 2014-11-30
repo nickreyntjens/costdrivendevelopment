@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>Minimize mutibility</title>
+<link href="file:///C|/Users/reyntjni/Dropbox/site/articles/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="wrapper">
+  <header id="header">
+  	<h1>Unit testing</h1>
+  </header>
+  <nav id="nav">
+  	<ul>
+    	<li><a href="../introduction/introduction.html">Introduction</a></li>
+        <li><a href="../statictyping/statictyping.html">StaticTyping</a></li>
+        <li><a href="unittesting.html">Unit testing</a></li>
+    </ul>
+  </nav>
+  <article id="main"> 
+    <p> 
+    	Unit test are needed. The ensure that our code becomes more reliable. But not all units test are the same.
+        I will delive into some common pitfalls  
+    </p> 
+    
+    Keep state space small, well defined
+    
+    <div class="reference">
+    	<a href="http://en.wikipedia.org/wiki/Joshua_Bloch" class="author">Joshua_Bloch</a>
+        <a href="https://www.youtube.com/watch?v=aAb7hSCtvGw&index=7&list=PL693EFD059797C21E" class="source">
+        	google talks youtube video</a>
+        <div class="quotes">
+        	<div class="quote">"Good names drive the design"</div>
+            <div class="quote">"Once you know what it is, you know its methods. [example 'a set']"</div>
+            <div class="quote">"Conceptual weight is more important than bulk."</div> 
+        <div>
+    </div>
+    
+    
+    <p>
+    It can detect a myriad of mistakes that programmers often make. Having a statistically typed language is the first step towards having fast feedback. For the weakly typed fan out there that claim that your unit tests can replace a compiler. This is only true of your units tests reach 100% coverage, which is very hard and not vary useful. The reality is that the compiler is the cheapest tester that exists! </p>
+    
+    <aside class="keynote">
+    A compiler is the cheapest tester that exists!
+    </aside>
+    
+    <p>Programmers can help the compiler do its job, or work agains it. 
+    
+    </p>
+    
+    <div class="keynote">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+    </div>
+    
+    <p> Yet that is exactly what many frameworks that get introduced today do. Many frameworks today use a thing called 'reflection'. Sounds scary right? It is! I cannot go into details about it here, but while reflection can in rare cases be useful. It mostly always is harmful. Google it if you want. </p>
+    <p> I cannot go into detail about all frameworks out there, so I will discuss just framework that that use reflection and I will illustrate what effect it has one the software coding.
+    <div class="code"> 
+    	<div class="codewrapper">
+<pre style="background: #000; color: #f8f8f8;"><span style="color:#99cf50">public</span> <span style="color:#99cf50">class</span> <span style="text-decoration:underline">Testing</span> {
+      <span style="color:#99cf50">public</span> <span style="color:#89bdff">Testing</span>() {
+      }
+      
+      <span style="color:#99cf50">public</span> <span style="color:#99cf50">void</span> <span style="color:#89bdff">Method</span>() {
+         <span style="color:#aeaeae;font-style:italic">/* Another Comment on multiple lines */</span>
+         <span style="color:#99cf50">int</span> x <span style="color:#e28964">=</span> <span style="color:#3387cc">9</span>;
+      }
+}
+</pre> 
+
+Good reading:
+https://www.youtube.com/watch?v=XcT4yYu_TTs
+https://www.youtube.com/watch?v=aAb7hSCtvGw&index=7&list=PL693EFD059797C21E
+https://www.youtube.com/watch?v=aAb7hSCtvGw&index=7&list=PL693EFD059797C21E
+
+        </div> 	
+    </div> 
+    </p>
+  </article>
+  <div id="conclusion"> "Buy a lawnmower with integrated toaster, all the others are doing it!" </div>
+</div>
+</body>
+</html>

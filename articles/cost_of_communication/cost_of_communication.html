@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Cost of communication</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"></div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Cost of communication</h1>
+        <div>The cost of communication is a huge part of the total cost of a software project.</div>
+      </div>
+<p> 
+Writing documentation, reading documentation and meetings are all considered forms of communication. All these activities refrain your programmers from writing code and thus are costly. In this article we look at techniques that will dramatically the number of required face to face and multiperson meetings. Doing so is a great cost saver. </p>
+<p>
+The main problem with written (or video recorded) documentation is that it gets outdated. There are to strategies that we can use to solve this problem. Fistly, we can write documentation that updates itself. Secondly, we can write documentation that has a very low chance of ever becomming outdated. </p>  
+<p>
+Self documenting code uses the first technique. When we make our code descriptive and aid guide the user though static typing, out code has become a form of self checking documentation. It checks itself for consistency and completeness and thus remains of high quality. It is also easy to write. Making a model of the domain uses the second technique. A model is a useful description of reality and reality very ralely changes.</p>
+</section>
+<section>
+<h2>How to write self documenting code</h2>
+<p>
+In self documenting code, the names of classes and methods are the most important form a communication. 
+Lets examine part of a program used by car dealers and see how to can increase the amount of information that is in this snippet of code. 
+</p>
+</section>
+<section>
+<h2>Self documenting source code</h2>
+<pre>
+<code class="language-java">
+class Car {
+	String engine;
+    double weight;
+    double price;
+    
+    public double getPrice() { return price; }
+    public double calculatePrice(boolean isPercentage, double discount) {
+    	// ...
+    }
+    // ...
+}
+</code>
+</pre>
+<p>
+After seing this code, the following questions remain unanswered? Is engine a unique id to for engine record in a database, or some sort of structured string? If it is a structured string what is its structure? In what units of measurement is weight expressed? is the price in dollars? And the price for what? Selling? Renting?   
+</p>
+<p>
+The method calculatePrice calculates the price using some discount? I guess yes looking at it arguments. And the discount can be a percentage of the price, or what? A 'not percentage'?
+</p>
+<p>
+By making some small modification to the code, the aswers to these questions can become embedded in the code itself.
+</p>
+<pre>
+<code class="language-java">
+class Engine {
+    enum EngineVendor          { OPEL, FORD, MUSTANG }
+    enum CombustionChamberSize { 1000_CC, 1200_CC    }
+
+    private final String commercialName;
+    private final EngineVendor vendor;
+    private final CombustionChamberSize cc;
+    
+    public Engine(String engineFields) {
+    	// Parse the passed in string
+        // ...
+        // Throw an exception if it is incorrectly formatted
+    }
+    
+    public String toString() {
+    	return commercialName + ":" + vendor + ":" + cc;  
+    }
+}
+
+class Car {
+	enum DiscountMode  {
+    	PERCENTAGE,
+        ABSOLUTE
+    }
+
+	Engine engine;
+    double weightInPounds;
+    double sellingPriceInDollar;
+    
+    public double getSellingPriceInDollar() { return sellingPriceInDollar; }
+    public double calculatePriceUsingDiscount(DiscountMode mode, double discount) {
+    	// ...
+    }
+    // ...
+}
+</code>
+</pre>
+<p>
+As you can see, by introducing additional classes and enums, many of the questions that we previously have dissappear. In addition this, these extra classes will increase reuse. Another class may no also use a engine and the structure of engines will be the same accross the entire code base. Adding additional static typing, informative fieldNames and enums is often the best way to document source code.</p>
+<p>
+After the possibilities for clarifying the code by introducing additional classes and enums have been exhausted, comments can be added to the code. 
+</p>
+<aside class="keynote">
+	Adding additional static type information though extra classes, informative fieldNames and enums, is often the best way to document source code.
+</aside>
+<p>
+While this code is definitilty better then the initial code, and workable. There is still room for improvement. Is it clear that DiscountMode and discount variable are somehow connected. We can also see the use of the noun discount. All of these are indications that discount should be a class on its own. So, let adapt the code some more.
+</p>
+<pre>
+<code class="language-java">
+class Engine {
+    enum EngineVendor          { OPEL, FORD, MUSTANG }
+    enum CombustionChamberSize { 1000_CC, 1200_CC    }
+
+    private final String commercialName;
+    private final EngineVendor vendor;
+    private final CombustionChamberSize cc;
+    
+    public Engine(String engineFields) {
+    	// Parse the passed in string
+        // ...
+        // Throw an exception if it is incorrectly formatted
+    }
+    
+    public String toString() {
+    	return commercialName + ":" + vendor + ":" + cc;  
+    }
+}
+
+abstract class Discount {
+	public abstract double applyToPrice(double price);
+	    
+    class RelativeDiscount : Discount {
+        private double discount;
+        public RelativeDiscount(double discount) { this.discount = discount; }
+        // ...
+    }
+    class AbsoluteDiscount : Discount {
+        private double discount;
+        public AbsoluteDiscount(double discount) { this.discount = discount; }
+        // ...
+    }
+    class NoDiscount : Discount {
+        // ...
+    }
+}
+
+class Car {
+	Engine engine;
+    double weightInPounds;
+    double sellingPriceInDollar;
+    
+    public double getSellingPrice(Discount discount) {
+    	Assert.isTrue(discount != null);
+        return discount.applyToPrice(price);
+    }
+}
+</code>
+</pre>
+<p>
+The above code sure looks a lot more then the initial code. True. But it is also its own documentation. Writing the bigger version of the code take almost no additional time. The Engine class was needed to enfore that the engine adherce to a specific structure. Introducing the Discount class gives three advantages. 
+</p>
+<aside class="keynote">
+Creating a class for a concept, such as discount, enhances encapsultation. Encapsulation maps changes in a requirements 
+to one isolated in place in the code, greatly reducing speeding up development.
+</aside>
+<p>
+Firstly, it shields my class from busines logic changes (by increasing encapsulation). Because a car object no longer knows how a discount is applied, when the business chooses to introduce an addition type of discount, or alter some side conditions of how a dicount gets calculated, the changes will not affect the car implementation. This prevents business changes from rippling trough to the object model, a big advantage.   
+</p>
+<p>
+Secondly, it make the discount logic reusable. Different products may have discounts. And Thirdly, it provides a natural place to documents (by using comments) how discounts work.
+</p>
+<section/>
+<section>
+<h2>Separate stable from unstable documentation</h2>
+<p> Concepts remain stable, structure and implemenation details change. An example of this can be seen on the article about 
+<a href="../database_modelling/database_modelling.html">database modelling</a>. Semantics are stable, implementations are not. Therefore, semantics should be documented, not implementation. </p>
+<p> Documentation should descibe the domain objects. Domain objects are a <b>formulize</b> version of the terminolgy used by the business. It must be formulised because the words used by the business often have multiple meaning, depending on in which context they are used.  </p>
+<p> 
+Having a document that expains the high level concepts of a project is very useful and will not go out of date because concepts are stable. They do not change! Really! An analysis illustrates how difference concepts that humans use are related. It is independent from informatics.  It is simply a formulised way to explain how a domain works. An analysis is simply a document to explain how a domain functions.  </p>
+<p>
+When presented to a biologist, he or she, the biologist, should understand the domain. So words like persistence, performance, high availability, database, computer, server, service, and so forth ... should not be used when expaining a domain. Inheritence does belong on a domain model (by using the <b>'is'</b> word). Lets start by a small example.  
+</p>
+<p>
+Lets suppose we need to write train schedualling software. Let's do an analysis of the domain. In order to do so, we ask a train drive to explain to an 20 year old student of biology how train work. If the train driver would do an exceptionally good job, we would get something like this:
+<div class="example_document">
+A train follows a traject. A traject consist out of multiple stops. At each stop is a train station. The train must wait a certain amount of time at each stop. A traject is driven by a train driver. Most times a traject is followed, the same train driver is assigned, but sometimes an exteral substitute train driver is used. There is an estimate of the time required to go from one stop to another. By summaring all these times we know how long a traject takes. We also keep track of each time a train arrives at a station, this way we can modify our estimates. And we can adjust the speed of the train between stops so that we meet the schedual. There are two kinds of trains, fast trains and slow trains. Fast trains do not stop at each station on their traject. Slow train do.
+</div>
+<p>
+This text idenitfying the key concepts (Train, Traject ...) of the domain and their relationship.  Such a description is called a model of the domain. A model defines all key concepts and their relationships. It is a communication tool between domain experts and the analist (not nessasary a programmer).
+</p>
+<aside class="keynote">
+The goal of having a model is to remove discrepancies between the view of different people, so that one reality can be obtained.
+</aside>
+<p> 
+Its goal is it align different visions of how a domain works. This is needed, because when we ask different persons how something works (for example a process of a company or in this case train schedualing) , hwe will get back different visions. The different visions will have simularities, but also discrepancies. Based on which version of reality should we build our software product? The goal of the analyst it to distill a universal reality out of all realities of the domain experts. This one reality is called the model (simular to how the laws of physical model the word). </p>
+<p>
+The provided description is a good start. But it has some flaws. Multiple concepts are identified by the same word. In the example, there is no word for a train completing a traject. Lets introduce the word 'train drive' to identify this concept. So, now we can say that each train drive follows a traject and associates with the stops on that traject, timing information.</p>
+<p> 
+Representing the model graphically will speed up communication. Because when we can visualize how one concept relates to another it makes it easier to focus our conversations and take notes. Concepts suddenly become tanguable things to which can can add notes, and that can descriptive arrows to each other.    
+</p>
+<figure> 
+    <img src="images/train_model.png" alt="A train domain model"/>
+   <figcaption>A domain model of train schedualing</figcaption>
+</figure>
+<p>
+Such a visual model aids us by providing a mental road map. In fact, it is very, very simular to a road map. When asking a person for directions, he or she will pick a start point and then describe a path that takes us to our destination. 
+</p>
+<p>
+When people example concepts and how they are relation a simular thing happens. We start from a starting concept and then hup to related concepts to reach some sort of end destinaton concept. The concept we were trying to example. Different persons will use different start end end location and each path that they describe will be different. A model unifies all those paths, simular to how a road map of a city could be obtained form asking serveral people for directions in a city. 
+</p>
+<p>
+Once a model has been completed, if done right, it will appear to be so simple, that it will be questionable if it was ever needed in the first place. This is a false perception simular to how when a person has seen (and studied somewhat) a map of a city, it will be easy for him or her to explain how to get from A to B.
+</p>
+<p>
+However, when you are the person that is listening to the directions, to task is much harder because you have no global overview (you'd which you had a map). In fact, this sence of the problem was to simple to build a model, is a very good indicator of success. The costs of this software project will have been reduced dramatically.
+</p>
+<aside class="keynote">
+The costs of a software project with a good model, will be vastly less then that of a project that is lacking a unified view of the domain and or problem.
+</aside>
+<p>
+Each time while making a model a discussion occurs (and they will), you will have saved at least one week of development time.  
+</p>
+<p>
+Once the model is finished, a piece of documentation has been created that does not get outdated. Because the model does not evolve very fast does it. A model descibes reality. Take a look at our train model, it hasn't changed for the last 50 years.
+It definitely want change in one year. A model is stable documentation that is extremely. 
+</p>
+<aside class="keynote">
+Model reality! It doesn't change very fast.
+</aside>
+<p>
+Complex projects that have several subdomains may need multiple models. Each of its relevant domain.
+During meetings these model can be used to guide the conversation.
+</p>
+</section>
+<section>
+<h2>One domain has many valid implementations</h2>
+<p>
+Once we have a domain model, we understand our domain and we can start to pick part of the domain that we will implement and part that we will implement later (or never).
+</p>
+<p>
+Because one we understand our domain, we can now use object oriented programming the leave 'holes' in our implementation. For more information see object oriented programming.
+</p>
+
+
+
+
+</section>
+<section>
+<h1>The cost of a one to one (real life) meeting?</h1>
+<p> 
+Let us calculate to cost of a one to one meeting. That is, one person steps up from behind his desk, goes to another person on the same floor and asks a question. The scenario start with the first person realising that he or she is missing a piece of information.
+</p>
+<p> 
+1° Person1           : Realization that a piece of information is missing          (1*0   min)
+2° Person1           : Finding out who to contact                                  (1*5   min)
+3° Person1           : Asking if he or she has time now? Through some chat system. (1*3   min)
+4° Person1 | Person2 : Physically moving                                           (1*1   min)
+5° Person2           : Context switching to the new problem to solve               (2*1   min)
+6° Person1           : Saying hello and explaining the new context                 (2*5   min)
+7° Person2           : Providing the answer                                        (2*10  min)
+8° Person1 | Person2 : Physically moving                                           (1*1   min)
+9° Person2           : Context switching back to the problem he was solving        (1*5   min)
+Price: 47 min * (50 dollar / 60 min) ~ 40 dollar
+</p>
+
+
+
+
+
+
+    </section>
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)." </div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

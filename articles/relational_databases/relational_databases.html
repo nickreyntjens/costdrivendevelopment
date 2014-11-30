@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Relational databases</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Relational database alternatives</h1>
+        <div>Don't blindly choose a relational database to store your object model. Alternative persistence solutions can be more performant and less expensive to build.</div>
+      </div>
+      <p> Most software projects have the requirement to persist their business objects in some form. Mostly, it is implicitly presumed that this is to be done in a relational database, because it is 'common' knowledge this is how it is suppose to be done.</p>
+      <p> However, most programmers don't understand what relational database are good at, and what they are bad at. Or they do not know of alternative data representations. For most people the world of persistence start and ends with relational databases. This is a costly affair, because choosing a more appropriate persistence technology may make your software solution a few orders of magnitude faster and it may also considerately reduce the required development effort. </p>
+      <p> Relational databases have historically grown out to be the most popular way to persist data. The reason for this is that they were very well suited for the task they were intended to solve. They are especially good at performing add hoc queries on procedurally structured data that is persisted on a high latency, high bandwidth storage device. </p>
+      <p> Lets explore the persistence medium for which relational databases or optimized, the traditional hard disk.</p>
+      <p>
+      A traditional hard disk consists of a rotating disk and a arm. The arm is a triangle shaped device with at its tip a read and write head.  
+      </p>
+      <figure>
+      	<img src="images/harddisk.jpg" width="400"/>
+        <figcaption>A inside view into a traditional hard disk</figcaption>
+      </figure>
+      <p>
+      The magnetic disk is divided into a number of concentric circles called tracks. As the rotating disk passes under the read head of the arm, the data on the track under the read head can be read very fast. But, it is not all glory, because moving the arm to another track is very slow! Moving the arm to a nearby track would not take long, but moving the arm to a far away track takes a considerable time. The time that it takes to move the arm from one track to another is called the seek time. The average seek time of a hard disk is about 9 milliseconds. While this may seem fast to a human, it seem like an eternity to a computer! 
+      </p>
+      <p>
+      Bandwidth means how many bytes per seconds can be read, while latency mean how the time required to deliver the first byte.
+      As a consequence of how it is built, a traditional hard disk can read data very fast, once its head is located under the right track, resulting in high bandwidth. But it takes a while before the first byte can be read because the head must first be positioned correctly, resulting in high latency.
+      A consequence of this is that the key to good performance on a hard disk is the read big chunks of data that is stored consecutively. And that is what relational databased do. Read one big fat table and keep the records of interest in memory, read the next big fat table and keep the records of interest in memory, join the records in memory and voila. You have read the data in big fat chunks and thus have good performance. 
+      </p>
+      <figure>
+       	<img src="images/inside_hdd_ssd.jpg" width="400"/>
+        <figcaption>In contrast to a traditional hard disk, a solid state disk consists solely out of microchips</figcaption>
+       </figure>
+      <p>
+      But in recent year a new and very different persistence technology has emerged, the Solid State Disk (SSD). As its name implies, it has no moving parts. Everything happens though electrical signals. Electrical signal select the correct chip and a part therein and the read the data of the chip. This goes much faster then moving some metal arm around. The result is that the latency of SSD is much smaller. In fact, an average SSD can deliver the first byte of a random read within a tenth of a milliseconds. Individual number will be different per device, but in general, a random read on an SSD is about a 100 times faster then on a hard disk. Because of this, databases that read little bits of data at once are more suited for this storage device. And that is exactly how a graph database behaves. The bigger the data chunks that are being read, the smaller this difference will become.  
+      </p>
+      <figure>
+       	<img src="images/harddisk_vs_solidstatedisk_randomreads.png"/>
+        <figcaption>A performance comparison between a solid state disk and a traditional hard disk</figcaption>
+       </figure>
+      <aside class="keynote">
+      	Hard disks have very high latency compared to solid state disk, this is adventageous for graph databases. 
+      </aside>
+      <p> 
+      Besides a change in hardware, a change in how we program has also occurred. Before the first commercial C++ compilers began to appear in 1988, all software that was being developed was procedural. After this milestone, most software was object oriented. In object oriented software, we use structures that inherit from each other. For example, both books and compact disks are products. In order words, books and compact disks have all the properties that a product has. Products have a price, so books and compact disks also have a price.
+      </p>
+      <figure>
+       	<img src="images/inheritance_classes.gif" width="400"/>
+        <figcaption>Both books and compact disks are products</figcaption>
+       </figure>
+       
+	  <p>
+      	Working with these inheriting structure while developing software has many advantages. But there is a problem. Tables in relational database cannot inherit from each other. Because of this, getting our objects (like books and compact disks) into the tables of relational database posed quite a few problems. We can solve them though object relations mappers (ORMs). But they add to the complexity of the program and more complexity mean more expensive. This problem is known as the <a href="http://en.wikipedia.org/wiki/Object-relational_impedance_mismatch">Object-relational impedance mismatch</a>.  In contract, representing inheritance structures in graph databases is quite straight forward.
+      </p>
+      <p>
+      So using a graph databases will most likely be faster and cost less in development, does this mean relational databases should always be avoided?
+      No. Relational database are very good when your data will have to be analyzed from various view points. For example, when you want to visualize your sales per year, per market segment, relational database are more suited. The key point of this article is to make you aware that relational databases will not always be the most cost effective solution. Other types of databases are also more suited to scale. For more information, on different kinds of databases, is a good starting point is <a href="https://www.youtube.com/watch?v=qI_g07C_Q5I">No SQL databases</a>
+      </p>
+      <aside class="keynote">
+      		Relational databases are not always the most cost effective solution. They can introduce complexity in persisting your objects that can be avoided. Alternative databases can be more performant and more cost effective to implement.
+      </aside>
+      <div class="reference">
+        <ul class="quotes">
+          <li>"Although Smalltalk gave O-O development a certain amount of legitimacy in the marketplace, it took C++ to bring O-O development what it really needed: widespread acceptance in the marketplace. For this reason, C++ may well be the most important O-O language. Not until C++ was released and the industry started supported it with a vengeance did O-O development become mainstream."</li>
+        </ul>
+        <a href="http://www.developer.com/java/other/article.php/3493761/The-Evolution-of-Object-Oriented-Languages.htm" class="author">The Evolution of Object Oriented Languages</a> </div>
+      </section>
+  </article>
+  <div id="conclusion">"Don't use a fork for everything, try a spoun once and a while"</div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

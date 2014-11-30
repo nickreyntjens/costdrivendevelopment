@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Database modelling</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"></div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Database modelling</h1>
+        <div>Different concepts having the same columns belong in different tables.</div>
+      </div>
+<p>
+This article is not about normalization. Technical people are on average quite knowledgable about that subject. 
+Where it goes wrong in many companies is that they consider a table as a set of columns. 
+Therefore, they presume that any two objects that have the same set of columns should be put in the same table. This is mistake that is made very often. And it is a costly one because, besides making the software more complex, it increases the cost of communication significantly.  </p>
+<p>
+Lets take an example. Suppose we need to store two types of objects in a relational database, points and vectors.
+In code the structure of these two classes may look like this:  </p>
+<pre>
+<code class="language-java">
+class Point  { double x; double y; }
+class Vector { double x; double y; }
+</code>
+</pre>
+<p>
+The structure of these classes is identical, so let us make the mistake that many poeple will and put these two classes in one table. The table could like like: </p>
+<pre>
+<code class="language-java">
+X | Y | TYPE
+0 | 0 | POINT
+1 | 2 | VECTOR
+</code>
+</pre>
+<p>
+On first sight this table looks fine, but how would you call this table? POINTS, VECTORS, 2DCOORDINTATES? Being unable to name something in an obvious first sign of improper modelling. Usually they will end up with a name that indicates 
+the role of the table, instead of what its records represent. For instance, PROGRAM_INPUT. </p>
+<aside class="keynote">
+Naming tables after the role they play in the program instead of what the records that they contain represent, is a sign of bad modelling.
+</aside>
+<p>
+But what is the problem with this table? The problem is that a point is a very different concept than a vector. 
+The fact that they have the same structure should be ignored because when new requirements come in, their structure will change independently from each other. Lets demonstrate. </p>
+<aside class="keynote">
+The structure of different concepts will change indepently from each other.
+</aside>
+<p>
+Two new requirements come in: Firstly, we must store for points that lie in the US what their sealevel is. Secondly, we must store for vectors what the cost per mile is. Let us adapt the table to reflect these two new requirements: </p>
+<pre>
+<code class="language-java">
+PROGRAM_INPUT
+X | Y | TYPE   | SEALEVEL | COST_PER_MILE_IN_USD  
+0 | 0 | POINT  | 342      | NULL
+1 | 2 | VECTOR | NULL     | 2
+0 | 3 | POINT  | NULL     | NULL
+</code>
+</pre>
+<p>
+Now we can clearly see the problems arise. Firstly, to a teammember of another team, what the table represents is not clear. 
+The third row has been added deliberitily to confuse you. The NULL in the column SEALEVEL means that the value of the sealevel for that point is not know. In contrast, the NULL in the column SEALEVEL for the second row means that sealevel is not applicable for that row. Clearly this double interpretation of what NULL means will lead to confusion. It is a direct result of having columns that are not applicable, which are a result of putting two different things, points and vectors, in the same table. Having values that are unknown is quite common in databases.</p>
+<p>
+This will have to be documented, which will take time and effect. This documentation will go out of date, so in reality other team members will have to come over and ask how it works. This is is taking time and effort of two people. Maybe a meeting is required? It is clear that the descision to put two different concepts in the same table will lead to a significant increase in the cost of communication.</p>
+<p>
+When somebody is suggesting to put two different concepts in one table, what they are implicitelly stating two things; Firsly, the two concepts have a simular structure and will continue to do so in the future. This is almost always wrong. Secondly, implementing two (easy to interpret) tables is more work then documenting one (hard to interpret) table. This is also not true. In reality, defining ten tables in SQL, that each have a clearly defined semantical interpretation, is much faster to implement then writing one good documentation document. Not even considering the very real fact that most documentation is informal and incomplete (not good). As time progresses the value of documentation decays because it goes out of date.</p>
+<aside class="keynote">
+Implementing two tables is much more cost effective then having to write documentation or explain things.
+</aside>
+<p>
+The key point to take away here, and this is true on all levels of software development, semantics are stable, they do not change, a structure is not stable, it changes because of agile requirements. Therefore models (including database models) must be based on semantics and not on structure.</p>
+<aside class="keynote">
+Semantics are stable, structure is not.
+</aside>
+<p>
+On a sidenote, some people when seeing the top snippet may have though the point or vector should somehow inherit from a common ancestor. This is also not true because of the same underlying priciples, a point is not a vector and a vector is not a point. We can test this by inventing questions that we can ask to a point and checking of that question makes sense for a vector. For example, we could ask a point if it lies inside some area. Clearly, this question does not make sence for a vector. Likewise, we can ask a vector how long it is. Clearly, this question does not make sence for a point. Neighter does it make sence to add two points together... and so forth.</p>
+<p>
+To illustrate the lessons learned in this acticle, let us restructure vector (without changing its semantics - it is still a vector), to indicate that semantics (or concepts) are stable, structures are not.</p>
+<pre>
+<code class="language-java">
+class Point  { double x;     double y;       }
+class Vector { double angle; double length;  }
+</code>
+</pre>
+    </section>
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)." </div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

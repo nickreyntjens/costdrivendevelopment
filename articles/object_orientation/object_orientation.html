@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Object orientation</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Object orientation</h1>
+        <div>The goal of object oriented programming is to be able to add new features <strong>without altering existing code</strong></div>
+      </div>
+      <p> 
+      Many books focus on the technical aspects of object oriented programming. They will explain how to define a class and how the mechanics of inheritence work. But they often fail to explain the goal of these techniques. Because of this, the true merics of object orientation are often lost. The result is an increasing the cost of a software project. </p>
+      <p>
+      The ultimate goal of object orientation is to be able to add new features to a program without changing the already existing code. 
+    Very concretely this means that we can add new functionality simply by adding some subclasses of existing classes and optionally adding some new methods to existing classes, but we cannot alter existing methods. The invers of object orientation is: in order to support one additional feature, all existing classes would have to be modified. It is clear that if this would be true, adding new feature will become increasingly difficult.
+      </p>
+      <aside class="keynote">
+      The invers of object orientation is that, in order to add one feature, every exiting class needs to be changed.
+      </aside>
+      <p>
+      Before we dive into the deeper parts on how to accomplice this goal, let give a quite recap of the basics of object oriented programming.
+      </p>
+      <h2>Separating goal from implementation</h2>
+      <p>
+      Does your mother know how the remote control of her television set works? Probabily not (except of she likes science and is a super cool mom). Yet, she is able to turn of the television. Wonderfull is it not! This means that when technology evolves and a new type of remote controll enters the markets, based on quantum emissions, you mother will still be able to use it. Your mother can work with different implementations of remote controlls. 
+      </p>
+      <aside class="details">
+      	A remote controll works by sending flashes of light to your television set, like sending morse code with a flash light. Only we can't see the light because it is out of our visual range.
+      </aside>
+      <p>
+      Lets define what a remote controll is. A remote control has a button and when I press it the television goes off.
+      Apparently, objects in the real world are defined by what they do, rather then how they do it. 
+      Some additional examples of this way of defining this are: An oven heats food. A car starts, moves forward, turns and brakes. A   
+      Ideally, one object offers one defined functionalty to its user.
+      </p>
+      <aside class="keynote">
+      	Something is defined by what it does, rather then how it does it.
+      </aside>
+      <p>
+      Besides being able to to turn on or off a television, another quality of a remote controll is that is has a battery. And that battery may be empty or not. In the drawing below, we show a schematic of class <b>RemoteControll</b> and two different implementation of it (<b>AT&TRemote</b> and <b>ReplayTvRemote</b>). The first section of the RemoteControll class tells us what class can do for us. It can turn a television on, turn a television off, and tell us if its battery is charged or not. For completeness, some instances of the two implementation have been added. One instance of the At&TRemote and two instances of the ReplayTvRemote. Asking the first instance of the ReplayTvRemote the question 'isBatteryCharged' could answer 'yes'. While asking the second instance could answer 'no'.
+      </p>
+      <figure>
+      	<img src="./images/oo_basics.png" alt="subclasses of remote control plus instances"/>
+        <figcaption>Two subclasses and some instances</figcaption>
+      </figure>
+      <p>
+      </p>
+      
+      <p>
+    </section>
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)." </div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>CRF</title>
+<!-- InstanceEndEditable -->
+<link href="prism.css" rel="stylesheet" type="text/css">
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<script src="js/prism.js"></script>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about/about.html">About</a></li>
+      <li><a href="articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- InstanceBeginEditable name="main" -->
+	<article>
+	<h1 class="what_is_crf">
+    	If you are looking to reduce the cost of your it department, you have come to the right place. The Cost Reduction Principles (CRP) do just that. 
+    </h1>
+    <div class="foundation">The cost reduction principles are a collection of sound advice to reduce you software development costs. It is based on the three qualities that any software project should have. Quality decision making, quality source code and quality integration and infrastructure. </div>
+	<figure>
+    	<img src="index_images/crf_components.png" alt="the components of CRF" />
+    </figure>
+    <ul id="option_boxes">
+    	<li><div class="option">
+         	<div class="content">
+                <h2>Quality decisions</h2>
+                Which path is choosen can have a dramatic effect on the budget.
+                An overly complex solution will evelate the costs significantly. But an overly simplisic solution prove to be useless later on. A balance must be sought.
+            </div>
+            <div class="">Explore <a href="about/about.html">Quality decisions</a></div>
+            <div class="clear"></div>
+        </div></li>
+        <li><div class="option">
+        <div class="content">
+        	<h2>Quality code</h2>
+            Source code is the hart and bones of a software project. 
+            How it is structured has a dramatice effect on the costs associated with a software project. 
+            Best practices must be applied.
+            </div>
+            <div class="">Discover <a href="about/about.html">Quality code</a></div>
+            <div class="clear"></div>
+         </div></li>
+        <li><div class="option">
+         <div class="content">
+         <h2>Quality integration</h2>
+         Deployment, integration and infrastructure should not soak up lots of time from you engineers.
+         Good engineers are rare and expensive so the overhead encountered by continous integration should be kept to a mimumum.
+         </div>
+         <div class="">Investigate <a href="about/about.html">Quality Integration</a></div>
+         <div class="clear"></div>
+         </div></li>
+    </ul>
+    </article>
+  <div id="conclusion"> "Once you know where the problem lies, the solution is often obvious." </div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

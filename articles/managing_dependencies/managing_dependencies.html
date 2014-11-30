@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Managing dependencies</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- InstanceBeginEditable name="main" -->
+<article id="main">
+<section>
+  <div class="opening">
+    <h1>Managing dependencies</h1>
+    <div>Forming inconsistent diamonds in dependency trees should be avoided.</div>
+  </div>
+  <p> The diamond problem is one that occurs in many aspects of programming. One variantion concerns dependencies between components.</p>
+  <figure> <img src="./images/dependencies_diamond_problem.png" alt="Dependency trees"/>
+    <figcaption>Dependency trees</figcaption>
+  </figure>
+  <p>There are two kinds of dependencies in companies: dependencies between in house developed components, and dependencies to components that are developed by other companies. Lets call them internal and external dependencies.</p>
+  <p> When two components refer to the same artifact, and that artifact is versioned, an inconsistent diamond can occur. In the figure we see a situation wherein component A has a dependency on components B and C, who each have a dependency on the same version component D. In this case there is no problem. We say that the dependency tree is consistent. But when components B and C have a dependency to different versions of component D, and all these components must be loaded inside one virtual machine (e.g. <a href="http://nl.wikipedia.org/wiki/Java_Virtual_Machine">Java Virtual Machine</a>), then there is a problem since (at least in java) only one version of a class can be loaded. Lets call this an inconsistent dependency tree.</p>
+  <aside class="definitionblock">
+    <div class="word">inconsistent dependency tree</div>
+    <div class="definition"> A dependency tree is inconsistent when two components refer to a third component of the different version</div>
+  </aside>
+  <p>While some languages do allow loading multiple versions of a class, I would not recommend it. These techniques will  give rise to many long discussions and potentially hard to find bugs. It is better to side step the problem all together and simply 
+  don't allow ill behaved dependency trees to exist. </p>
+  <p>For easily managing external dependencies, it is recommended to put all external dependencies in one project and to have a dependency from each project to that one project. An advantage of this is that it is easy to set a policy as to which frameworks can be use in projects. Frameworks that are not approved don't make it into the external dependencies project.</p>
+  <aside class="keynote">Put all external dependencies in one project and make all project dependent on that project</aside>
+  <p>For easily managing internal dependencies, it is necessary that when a new version of a component is released, all dependent components update to this new version in an atomic way.</p>
+  <aside class="keynote">All components must update to a new version of another component, in an atomic way</aside>
+  <p>Keeping all components in the same repository can greatly simplify this. </p>
+</section>
+<div id="conclusion">"Diamonds are forever, keep them consistent." </div>
+<!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>

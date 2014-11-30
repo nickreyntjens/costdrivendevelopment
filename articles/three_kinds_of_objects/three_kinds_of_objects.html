@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Edge Util Entity</title>
+<link href="file:///C|/Users/reyntjni/Dropbox/site/articles/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="wrapper">
+  <header id="header">
+  	<h1>Three kinds of responsibilities</h1>
+  </header>
+  <nav id="nav">
+  	<ul>
+    	<li><a href="../introduction/introduction.html">Introduction</a></li>
+        <li><a href="../statictyping/statictyping.html">StaticTyping</a></li>
+        <li><a href="unittesting.html">Unit testing</a></li>
+    </ul>
+  </nav>
+  <article id="main"> 
+    <aside class="keynote">
+    	Any class should do one of these three responsibilities: 
+        <ul>
+            <li>Edge objects, objects that connect to other processes;</li>
+            <li>Housekeeping objects, objects that provided internal infrastructure;</li>
+            <li>Domain objects, objects that represent domain entities</li>
+        </ul>
+    </aside>
+    <p>
+    	
+    </p>
+    
+    <div class="keynote">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+    </div>
+    
+    <p> Yet that is exactly what many frameworks that get introduced today do. Many frameworks today use a thing called 'reflection'. Sounds scary right? It is! I cannot go into details about it here, but while reflection can in rare cases be useful. It mostly always is harmful. Google it if you want. </p>
+    <p> I cannot go into detail about all frameworks out there, so I will discuss just framework that that use reflection and I will illustrate what effect it has one the software coding.
+    <div class="code"> 
+    	<div class="codewrapper">
+<pre style="background: #000; color: #f8f8f8;"><span style="color:#99cf50">public</span> <span style="color:#99cf50">class</span> <span style="text-decoration:underline">Testing</span> {
+      <span style="color:#99cf50">public</span> <span style="color:#89bdff">Testing</span>() {
+      }
+      
+      <span style="color:#99cf50">public</span> <span style="color:#99cf50">void</span> <span style="color:#89bdff">Method</span>() {
+         <span style="color:#aeaeae;font-style:italic">/* Another Comment on multiple lines */</span>
+         <span style="color:#99cf50">int</span> x <span style="color:#e28964">=</span> <span style="color:#3387cc">9</span>;
+      }
+}
+</pre> 
+
+Good reading:
+https://www.youtube.com/watch?v=XcT4yYu_TTs
+https://www.youtube.com/watch?v=aAb7hSCtvGw&index=7&list=PL693EFD059797C21E
+https://www.youtube.com/watch?v=aAb7hSCtvGw&index=7&list=PL693EFD059797C21E
+
+        </div> 	
+    </div> 
+    </p>
+  </article>
+  <div id="conclusion"> "Buy a lawnmower with integrated toaster, all the others are doing it!" </div>
+</div>
+</body>
+</html>

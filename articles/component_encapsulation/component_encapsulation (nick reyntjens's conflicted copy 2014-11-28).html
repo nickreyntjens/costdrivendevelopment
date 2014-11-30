@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<title>Component encapsulation</title>
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+	$(window).bind("load", function() {
+	   $('.collapse-group .collapse').hide();
+	   $('.collapse-group .btn').on('click', function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		var $collapse = $this.closest('.collapse-group').find('.collapse');
+		$collapse.slideToggle('slow');
+	   });
+	});
+</script>
+</head>
+<body>
+<div id="wrapper">
+  <header id="header"> Software Costs Agile Reduction Techniques (SCART) </header>
+  <nav id="nav">
+    <ul>
+      <li><a href="">Introduction</a></li>
+      <li><a href="">StaticTyping</a></li>
+      <li><a href="">Unit testing</a></li>
+      <li><a href="">Extra</a></li>
+    </ul>
+  </nav>
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Component encapsulation</h1>
+        <div>A component should be able to install itself, and populate itself with data</div>
+      </div>
+      <p>This site is about how to reduce your software development costs and this aspect is a big factor in it. A big company usual consists out of teams, who each build a component. Those components together form a system. It is crusial than any team can install and use, another team's component, in an easy way. Getting this right will allow a substancial productivity gain through a company. </p>
+    </section>
+    <section>
+      <h2>Hard to install components are costing you compony money!</h2>
+      <p> In most companies that I have seen, installing a component and getting the data that it needs to operate is very challenging. There will be some scripts and tool here and there to load the data. Some tool the setup the database. Some specific directory structure must be created with some files put at specific locations.... and so on. If there is documentation, then you are in luck, but it will always be out of date. The sad reality is that installing a component is usually not a simple task. </p>
+      <p> Not being able to install components easily makes testing much less effective. This is because a component is then often tested against simulated other components and these simulations are not perfect. They are incomplete and can be based on wrong assumption, which and lead to incompatibility between compoments. </p>
+      <p> Ideally, tests should use as much of the real components as possible. One could point out that these kinds of tests are slow, but tests can be made fast by using in memory databases and queues, and running them in parallel. Modern laptops have about 8 GB of ram and 1 TB of disk space. This means that a companies entire system, can be run from one laptop these these days. The only thing preventing this is the difficulty of installing components and getting suitable data. </p>
+      <aside class="keynote"> Not being able to install components easily makes testing much less effective </aside>
+      <p> Ideally, tests should use as much of the real components as possible. One could point out that these kinds of tests are slow, but tests can be made fast by using in memory databases and queues, and running them in parallel. Modern laptops have about 8 GB of ram and 1 TB of disk space. This means that a companies entire system, can be run from one laptop these these days. The only thing preventing this is the difficulty of installing components and getting suitable data. </p>
+      <aside class="keynote"> A companies entire system, can be run from one laptop these these days. </aside>
+      <p> Writing simulated components takes time and is not effective at finding incompatibility bugs. Also for DevOps and system admins hard to install components take much time. Also, when a team must give support to other team about how there component must be installed, this takes losts of time. All this taken together means that components that are hard to install, are costing your company some serious money. </p>
+    </section>
+    <section>
+      <h2>Making components easy to install</h2>
+      <p> In this section, I will the ideal, perfect component. In order for a components to be able to be installed and used easily, it must meet the following requirements:</p>
+      <ul>
+        <li>A component must recieve its dependent components from the outside (dependency injection).</li>
+        <li>It must recieve its database connection etc from the outside (dependency injection).</li>
+        <li>It must be able to creates its tables (or other structures) in the database that is provided to it.</li>
+        <li>It must be able to creates its directory structure (or other structures) on the file system that is provided to it.</li>
+        <li>It must be able to copy an extract of data from another instance of that same component (for instance production)</li>
+      </ul>
+<p>
+Suppose there is a company that has wants to keep (possibly complex) statistical information about some messages that are put in a queue, for instance ActiveMQ. A test of a component like that could look like the following snippet.  
+</p>
+<pre>
+<code class="language-java">
+public class Tests {
+	
+    public static void main(String[] args) {
+    	testThat_WhenMessagesArePutOnQueue_StatisticsComponentCountsThem();
+    }
+    
+    public void test1_WhenMessagesArePutOnQueue_StatisticsComponentCountsThem() {
+        String databaseServerConnectionUrl      = ...;
+        String activeMqConnectionUrl            = ...;
+        String localFileSystemRoot              = ...;
+        String urlToStatsComponentInProduction  = ...;
+        String dataSetName                      = ...;
+        
+        SqlConnectionFactory sqlFactory = getSqlConnectionFactory(databaseServerConnectionUrl);
+        QueueConnectionFactory queueFactory = getQueueConnectionFactory(activeMqConnectionUrl);
+        
+        // Create and install the component
+        StatisticsComponentEnv statisticsEnv = new StatisticsComponentEnv(sqlFactory, queueFactory, fileSystemRoot);
+    	StatisticsComponent statistics = new StatisticsComponent(statisticsEnv);
+        statistics.installDatabase();
+        
+        // Load some data from production  
+        statistics.loadData(urlToStatsComponentInProduction, dataSetName);
+        
+        // Start the component
+        statistics.start();
+        
+        // Put some messages on the queue
+        putSomeMessagesOnQueue(queueUrl, generateMessages(10));
+        Thread.sleep(5 * 1000);
+        
+        // Use the component
+        StatisticsClientInterface client  = statistics.getStatisticsClientInterface();
+        int messagesCount = client.countMessages();
+        Assert.isTrue(messagesCount, 10);
+    }
+    
+    public void test2_someDescription() { ... }
+    public void test3_someDescription() { ... }
+    // ... extra tests
+    
+	private SqlConnectionFactory getSqlConnectionFactory(String connectionUrl) 
+    { /* ... some code */ }
+    
+    private QueueConnectionFactory getQueueConnectionFactory(String queueUrl)  
+    { /* ... some code */ }
+    
+    private void putSomeMessagesOnQueue(String queueUrl, List messages)        
+    { /* ... some code */ }
+    
+    private void generateMessages(int amount)                                  
+    { /* ... some code */ }
+}
+</code>
+</pre>
+<p>
+What is striking about this it the simplicity. The reason that it is so easy is because this component encapsulates its entire functionality.
+As a user, I don't have to know how its tables are structure, how it loads its data, or any other aspects that I am not interested in.
+All I want to do as a user, it send some messages to it. I don't have to deploy it to a webserver. I don't have to create a spring file to inject components on which this componnent is dependent. The component itself knows how to install itself and optionall, how to load some test data.
+</p>
+<p>
+The example can be improved by using an in memory queue, an in memory database and an <a href="http://en.wikipedia.org/wiki/RAM_drive">in-memory file system</a>. Here are <a href="../unittesting/unittesting.html">some other aspects of testing</a> 
+</p>
+
+
+    </section>
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)." </div>
+</div>
+</body>
+</html>

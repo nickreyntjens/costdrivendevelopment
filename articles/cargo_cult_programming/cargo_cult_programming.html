@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/mainTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Cargo cult programming</title>
+<!-- InstanceEndEditable -->
+<link href="../prism.css" rel="stylesheet" type="text/css">
+<link href="../style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/prism.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+$(window).bind("load", function() {
+   $('.collapse-group .collapse').hide();
+   $('.collapse-group .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	$collapse.slideToggle('slow');
+   });
+});
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<header id="header">
+  <div class="top_double_line"></div>
+  <div class="wrapper">
+    <div class="logo"> 
+      <img src="../index_images/logo_03.png" alt="crf logo"/>
+      <div class="cost_reduction_framework">Cost reduction <br/>
+        principles</div>
+    </div>
+    <div class="crf_explanation_wrapper">
+      <div class="crf_explanation"> A proven, publically available framework for reducing the cost of software development.</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="lower_double_line"></div>
+</header>
+<div class="wrapper">
+<nav id="nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/about.html">About</a></li>
+      <li><a href="../articles_overview/articles.html">Articles</a></li>
+    </ul>
+  </nav>
+  <div class="clear"><div>
+  <!-- InstanceBeginEditable name="main" -->
+  <article id="main">
+    <section>
+      <div class="opening">
+        <h1>Cargo cult programming</h1>
+        <div>Software development organizations that attempt to emulate more successful development houses by slavishly following a software development process without understanding the reasoning behind it.</div>
+      </div>
+      <p>
+      Cargo cult programming is a style of computer programming characterized by the ritual inclusion of code or program structures that serve no real purpose. In this article we will explore the underlying reasoning flaws that leads to these bad practices, give some concrete examples of their very real effects and identify some frequently code snippets that result from it.
+      </p>
+      <p>
+      The term cargo cult originally referred to aboriginal religions that grew up in the South Pacific after World War II. The practices of these groups centered on building elaborate mock-ups of airplanes and military landing strips in the hope of summoning the god-like airplanes that had brought marvelous cargo during the war.
+      </p>
+      <div class="definitionblock">
+        <div class="word">Cargo cult programming</div>
+        <div class="definition">A style of computer programming characterized by the ritual inclusion of code or program structures that serve no real purpose or the practice of making incorrect decision based on fallacious arguments</div>
+      </div>
+      
+      <p>
+      At the heart of cargo cult programming lies incorrect reasoning. It is a sad fact that a significant amount of decisions in the software industry are based on fallacious arguments. A fallacy is incorrect argument in logic. The most commonly used fallacies are; Something that is believed by many is true (<a href="http://en.wikipedia.org/wiki/Argumentum_ad_populum">Argumentum ad populum</a>), YAGNI (<a href="http://en.wikipedia.org/wiki/Thought_Reform_and_the_Psychology_of_Totalism#Thought-terminating_clich.C3.A9">Thought terminating cliché</a>), and 
+      presuming the proposed solution as implicit correct (<a href="http://en.wikipedia.org/wiki/Confirmation_bias">Begging the question</a>). The study of incorrect argumentation (fallacious argumentation) is very useful and if you have the time I advice you to further explore it.
+      </p>
+      <aside class="keynote">
+      A significant amount of decisions in the software industry are based on fallacious arguments.
+      </aside>
+      <p>
+      At first glance one may think that these forms of incorrect reasoning will not have no far reaching consequences, but nothing is further from the truth. To illustrate this, I will disprove a common presumption about how to persist objects. This will illustrate the very real influence of incorrect reasoning. In all articles presented on this site, all conclusions are based solely on a flow of reasoning that refains from using fallacious arguments. The most dangerous fallacious argument is that of the status quo (<a href="http://en.wikipedia.org/wiki/Argumentum_ad_populum">Argumentum ad populum</a>) reasoning. This prevents a fresh look to appear. Presenting a fresh view on certain aspects on software development and providing material that is interesting to think about is the intention of this site.
+      </p>
+      <p>
+      In a second chapter of this article, I will show how making decisions bases on the majority opinion will lead to suboptimal decisions. And so, even though most managers or team leads will use the <a href="http://en.wikipedia.org/wiki/Argumentum_ad_populum">Argumentum ad populum</a> to choose between two possible solutions to a problem, this will often not be the best proposed solution. 
+      </p>
+      <p>
+      In a third section, I will go over the most popular patterns that are (mis)used by cargo cult programmers. Many professional programmers will recognize these incorrect application of design patterns by some of their colleagues. 
+      </p>
+      </section>
+      <section>
+      <h1>An example of cargo cult programming</h1>
+      <p>
+      A cargo cult programmer will create a trivial class (like address) and put a bunch of setters on it. He or she will then create a 'builder', to build instance of the class. This 'builder' serves no purpose what so ever. But he or she will write one anyway. 
+      </p>
+      <p>
+      The sole reason why one would want to write a 'builder' is because then he or she can write a unit test for it. Because the address class will be mutable (which it should not be), he or she can write a unit test for that too. By the end of the day, he or she will have written lots of code. And so he or she did a good job and go home knowing that the next day, he or she can write some more code that does not really serve a purpose. Note, I choose the builder pattern because this is the most of a frequent symptom of cargo cult programming. 
+      </p>
+      <aside class="keynote">
+      Cargo cult programming can be recognized by code snippets using the builder pattern.
+      </aside>
+      <p>
+      Note that there are also some valid uses of the builder pattern (an example would be <a href="http://msdn.microsoft.com/en-us/library/bb425822.aspx">linq to sql</a> -- a microsoft technology), but that code will have true complexity and will look very different from the sample below. The code snippets below illustrate what the code that a professional cargo cult programmer will generate looks like. 
+      </p>
+<pre>
+<code class="language-java">
+/** A badly written class -- It should be immutable **/
+public class Address {
+	private String country;
+    private String city;
+    private String streetName;
+    private String houseNumber;
+    
+    public String getCountry() { return country; }
+    public String getCity() { return city; }
+    public String getStreetName() { return streetName; }
+    public String getHouseNumber() { return houseNumber; }
+    
+    public void setCountry(String country) { this.country = country; }
+    public void setCity(String city) { this.city = city; }
+    public void setStreetName(String streetName) { this.streetName = streetName; }
+    public void setHouseNumber(String houseNumber) { this.houseNumber = houseNumber; }
+}
+
+/** A useless class **/
+public class AddressBuilder {
+	private String country;
+    private String city;
+    private String streetName;
+    private String houseNumber;
+    
+    public HouseBuilder setCountry(String country)  {
+    	this.country = country;
+        return this;
+    }
+    
+    public HouseBuilder setCity(String city)  {
+    	this.city = city;
+        return this;
+    }
+    
+    public HouseBuilder setStreetName(String streetName)  {
+    	this.streetName = streetName;
+        return this;
+    }
+    
+	public HouseBuilder setHouseNumber(String houseNumber)  {
+    	this.houseNumber = houseNumber;
+        return this;
+    }
+    
+    public void build() {
+    	Address address = new Address();
+        address.setCountry(country);
+        address.setCity(city);
+        address.setStreetName(streetName);
+        address.setHouseNumber(houseNumber);
+        return address;
+    }
+}
+
+/** A normal class **/
+public class Person {
+	private String firstName;
+    private String lastName;
+    private Address address;
+    
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public Address getAddress() { return address; }
+    
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void SetAddress(Address address) { this.address = address; }
+}
+</code>
+</pre>
+<p>
+Notice how the methods of the builder contain no logic. What follows are the unit tests of these classes.
+</p>
+<pre>
+<code class="language-java">
+/** A useless unit test  **/
+@Test
+public class AddressTest {
+	private Address address;
+    
+    /** A useless setup method **/
+    @Before
+    public void setup() {
+    	address = new Address();
+    }
+    
+    @Test
+    public void test_setCountry() {
+    	address.setCountry("someCountry");
+        Assert.assertEquals("someCountry", address.getCountry());
+    }
+    
+    @Test
+    public void test_setCity() {
+    	address.setCity("someCity");
+        Assert.assertEquals("someCity", address.getCity());
+    }
+    
+    @Test
+    public void test_setStreet() {
+    	address.setStreet("someStreet");
+        Assert.assertEquals("someStreet", address.getStreet());
+    }
+    
+    @Test
+    public void test_setHouseNumber() {
+    	address.setHouseNumber("someHouseNumber");
+        Assert.assertEquals("someHouseNumber", address.getHouseNumber());
+    }
+}
+
+/** A useless unit test class **/
+public class AddressBuilderTest {
+	private AddressBuilder addressBuilder;
+    
+    @Setup
+    public void setup() {
+    	addressBuilder = new AddressBuilder();
+    }
+    
+    @Test
+    public void test_setCountry() {
+    	AddressBuilder returnedAddressBuilder = addressBuilder.setCountry("someCountry");
+        Assert.assertEquals(returnedAddressBuilder, addressBuilder);
+    }
+    
+	@Test
+    public void test_setCity() {
+    	AddressBuilder returnedAddressBuilder = addressBuilder.setCity("someCity");
+        Assert.assertEquals(returnedAddressBuilder, addressBuilder);
+    }
+    
+    @Test
+    public void test_setStreetName() {
+    	AddressBuilder returnedAddressBuilder = addressBuilder.setStreetName("someStreetName");
+        Assert.assertEquals(returnedAddressBuilder, addressBuilder);
+    }
+    
+    @Test
+    public void test_setHouseNumber() {
+    	AddressBuilder returnedAddressBuilder = addressBuilder.setHouseNumber("someHouseNumber");
+        Assert.assertEquals(returnedAddressBuilder, addressBuilder);
+    }
+    
+    @Test
+    public void test_build() {
+    	addressBuilder.setCountry("someCountry");
+        addressBuilder.setCity("someCity");
+        addressBuilder.setStreetName("someStreetName");
+        addressBuilder.setHouseNumber("someHouseNumber");
+        Address address = addressBuilder.build();
+        Assert.assertNotNull(address);
+        Assert.assertEquals(address.getCountry(), "someCountry");
+        Assert.assertEquals(address.getCity(), "someCity");
+        Assert.assertEquals(address.getStreetName(), "someStreetName");
+        Assert.assertEquals(address.getHouseNumber(), "someHouseNumber");
+    }
+}
+</code>
+</pre>
+<p>
+As you can see, the code that cargo cult programming leads to is very bloated. This makes it appear as if lots of work has been performed. But almost no value has been created. In the snippet that follows, the same code is written, but its cargo cult pieces have been removed. 
+</p>
+<pre>
+<code class="language-java">
+/** A correctly written class -- It has been made immutable **/
+public class Address {
+	private final String country;
+    private final String city;
+    private final String streetName;
+    private final String houseNumber;
+    
+    public Address(String country, String city, String streetName, String houseNumber) {
+    	// defensive programming dictates that we check presume that other people will try to 'abose' this class
+        // We put guards in place that prevent that -- in addition to this, they could also check for format
+        Assert.notNull(country);
+        Assert.notNull(city);
+        Assert.notNull(streetName);
+        Assert.notNull(houseNumber);
+        
+        // assign the data
+        this.country = country;
+        this.city  = city;
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+    }
+    
+    public String getCountry() { return country; }
+    public String getCity() { return city; }
+    public String getStreetName() { return streetName; }
+    public String getHouseNumber() { return houseNumber; }
+}
+
+/** A normal class **/
+public class Person {
+	private String firstName;
+    private String lastName;
+    private Address address;
+    
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public Address getAddress() { return address; }
+    
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void SetAddress(Address address) { this.address = address; }
+}
+</code>
+</pre>
+<p>
+This version of the code is much shorter and of much higher quality. The code has been made immutable where possible, though the use of the 'final' keyword, and the unnecessary builder class (and its unit tests) have been removed. There exist not a single good metric by which you can measure the cargo cult factor of a code base, performing a search on the code bases for the word builder, will give an indication. If these builder classes contain no real logic, then they are cargo cult. The practice is truely widely spread. One out of five programmers practice cargo cult regularly, would be a fair estimate. Companies should put in place active measures against it in place. This is one of the reasons why code review by an architect is needed.  
+</p>      
+<aside class="keynote">
+	Code review is needed to prevent cargo cult code from entering the code base.
+</aside>
+<section>
+            
+      <div class="reference">
+        <ul class="quotes">
+          <li>"Software development organizations that attempt to emulate more successful development houses, either by slavishly following a software development process without understanding the reasoning behind it, or by attempting to emulate a commitment-oriented development approach (in which software developers devote large amounts of time and energy toward seeing their projects succeed) by mandating the long hours and unpaid overtime, when in successful companies these are side-effects of high motivation and not requirements."  Note that in both cases, McConnell contends that competence ultimately determines whether a project succeeds or fails, regardless of the development approach taken.</li>
+        </ul>
+        <a href="https://www.youtube.com/watch?v=aAb7hSCtvGw&index=7&list=PL693EFD059797C21E" class="author">McConnell, Steve (2003). Professional Software Development. pp. 23–26</a> </div>
+        
+        
+    </section>
+  </article>
+  <div id="conclusion"> "Unit tests freeze your code. Love your code and keep it warm (and flexible)."</div>
+  <!-- InstanceEndEditable -->
+  </div>
+</body>
+<!-- InstanceEnd --></html>
